@@ -1,0 +1,87 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<title> Fish Game! </title>
+<script src="https://simplycodingcourses.com/files/simplyjs/simply.js"></script>
+<script>
+function start(){
+sjs.open("target",800,600);
+var background = new sjs.Image("Images/space7.png")
+background.setSize(sjs.getWidth(),sjs.getHeight());
+/* Back Ground Properties */
+var player = new sjs.Image("Images/New Player.png");
+player.type = "player";
+//player.node.style.transform = 'rotate(90deg)';
+player.center()
+/* All Player Properties */
+player.setSize(75,75);
+sjs.keyDown(RIGHT_KEY, function (){
+	//player.setImage("Images/New_Player.png")
+	player.pushRight();
+});
+sjs.keyDown(LEFT_KEY, function(){
+	//player.setImage("Images/New.Player.png")
+	player.pushLeft();
+});
+sjs.keyDown(UP_KEY, function(){
+	player.pushUp();
+});
+sjs.keyDown(DOWN_KEY, function(){
+	player.pushDown();
+});
+//player
+/* Other Player Properties from Lesson 3.2*/
+player.friction = .2;
+player.accel = .3;
+/* Player Movement Code*/
+sjs.onHit("player","crumbs",function(x,y){
+	/* Javascript Code From Lesson 3.6 Here */
+	x.grow(50,30);
+	setTimeout(function(){
+		x.grow(-50,-30);
+	}, 4000);
+		y.destroy();
+});
+
+//Crumbs
+setInterval(function(){
+	var newCrumb = new sjs.Image("Images/crumbs.png");
+	newCrumb.type = "crumbs";
+	newCrumb.setGravity();
+	newCrumb.centerH();
+	newCrumb.noBounds = true;
+}, 10000);
+//enemies
+setInterval(function(){
+	 var speed = Math.floor(1 + Math.random()*10);
+
+		var enemy = new sjs.Image("Images/blue_right.png");
+		enemy.node.style.transform = 'rotate(90deg)';
+		enemy.type = "enemy";
+		enemy.setSize(100,50);
+		enemy.noBounds = true;
+		enemy.friction = 0;
+		enemy.pushDown(speed);
+		//enemy.scaleSize(.5 + Math.random() * 1.2);
+		enemy.moveTo(Math.random()*(enemy.getClamp().x),-enemy.getHeight());	
+},1000);
+
+sjs.top_screen.offset(-500);
+
+sjs.onHit("enemy",["bottom_screen"],function (x,y) {
+	x.destroy();
+});
+
+
+
+
+} //end start
+</script>
+</head>
+<body onload="start()">
+<h1> Fish Game! </h1>
+
+<div id="target" style="margin:auto;background:grey;"></div>
+</body>
+
+
